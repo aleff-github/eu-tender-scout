@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "eu-tender-scout-mcp",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-04",
+  "build": {
+    "command": "npm run check && npm test"
+  }
+}

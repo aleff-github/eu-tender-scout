@@ -1,0 +1,104 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "eu-tender-scout",
+  "version": "0.1.4",
+  "description": "Search and triage EU public procurement opportunities using official TED data.",
+  "author": {
+    "name": "aleff-github",
+    "url": "https://github.com/aleff-github"
+  },
+  "homepage": "https://github.com/aleff-github/eu-tender-scout",
+  "keywords": [
+    "procurement",
+    "tenders",
+    "TED",
+    "European Union",
+    "public contracts"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "EU Tender Scout",
+        "shortDescription": "Find and triage EU tenders",
+        "longDescription": "Search official TED procurement notices and triage which matches are confirmed open competitions, closed competitions, award/history notices, or cases where openness cannot be confirmed from returned deadline evidence. EU Tender Scout surfaces buyer, geography, CPV, publication date, deadline, value, and canonical TED links when available, while keeping source evidence separate from relevance assessment. It is intended for procurement discovery and research; it does not determine legal eligibility to bid, submit bids, or replace official notices and procurement documents.",
+        "developerName": "aleff-github",
+        "category": "Business & Operations",
+        "capabilities": [
+          "Search EU tenders",
+          "Triage bidding status",
+          "Show TED evidence"
+        ],
+        "websiteURL": "https://github.com/aleff-github/eu-tender-scout",
+        "defaultPrompt": [
+          "Find open cybersecurity tenders in Italy and separate award/history notices.",
+          "Search recent EU software procurement and show the TED query used.",
+          "Build direct TED links for publication 676146-2026."
+        ],
+        "supportURL": "https://github.com/aleff-github/eu-tender-scout/issues",
+        "privacyPolicyURL": "https://github.com/aleff-github/eu-tender-scout/blob/main/PRIVACY.md",
+        "termsOfServiceURL": "https://github.com/aleff-github/eu-tender-scout/blob/main/TERMS.md",
+        "brandColor": "#1D4ED8",
+        "composerIcon": "./assets/icon.svg",
+        "logo": "./assets/icon.svg"
+      },
+      "onboardingSkill": "./skills/eu-tender-discovery/SKILL.md",
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Country- and date-scoped cybersecurity opportunity discovery",
+              "prompt": "Find cybersecurity-related procurement opportunities in Italy published from 2026-09-01 through 2026-10-04 and separate confirmed-open competitions from other notice states.",
+              "tools_triggered": "find_cybersecurity_opportunities",
+              "expected_behavior": "Search TED with the cybersecurity preset, return the generated query, and keep confirmed-open competitions separate from closed, award/history, deadline-unknown, and other notices."
+            },
+            {
+              "description": "Evidence-first triage of an expert TED query",
+              "prompt": "Triage TED notices matching buyer-country = ITA AND classification-cpv = 72* and show which returned competition notices are confirmed open based on deadline evidence.",
+              "tools_triggered": "triage_tenders",
+              "expected_behavior": "Execute the supplied TED expert query and classify returned notices conservatively using notice type and returned submission deadlines; do not treat ACTIVE scope alone as proof of openness."
+            },
+            {
+              "description": "Raw expert TED search",
+              "prompt": "Run the TED query buyer-country = ITA AND publication-date = (20261001 <> 20261031) and return up to 10 raw matching notices with the standard evidence fields.",
+              "tools_triggered": "search_tenders",
+              "expected_behavior": "Execute a bounded raw TED search and return up to 10 notices without converting ACTIVE scope into an open-bid claim."
+            },
+            {
+              "description": "Explicit TED query syntax validation",
+              "prompt": "Validate this TED expert-search query without running the normal discovery search: buyer-country = ITA AND FT ~ cybersecurity.",
+              "tools_triggered": "validate_tender_query",
+              "expected_behavior": "Call TED syntax validation for the supplied query and report validation or upstream API errors without fabricating search results."
+            },
+            {
+              "description": "Canonical links for a known TED publication number",
+              "prompt": "Build the direct TED web, HTML, PDF, signed-PDF, and XML links for publication 676146-2026 in English.",
+              "tools_triggered": "build_notice_links",
+              "expected_behavior": "Deterministically return canonical TED URLs for publication 676146-2026 without making an external network request."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Unrelated request outside procurement discovery",
+              "prompt": "What is the weather in Rome tomorrow?"
+            },
+            {
+              "description": "Unsupported bid submission action",
+              "prompt": "Submit a bid to this tender on my behalf."
+            },
+            {
+              "description": "Unsupported binding legal eligibility conclusion",
+              "prompt": "Guarantee that my company is legally eligible to participate in this tender."
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "EU Tender Scout is read-only and does not sell products, process payments, submit bids, or perform procurement transactions."
+      },
+      "publication": {
+        "release_notes": "Initial public release of EU Tender Scout 0.1.4 with evidence-first TED search, conservative opportunity triage, canonical TED links, and high-precision cybersecurity discovery."
+      }
+    }
+  },
+  "repository": "https://github.com/aleff-github/eu-tender-scout",
+  "license": "GPL-3.0-only"
+}

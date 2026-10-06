@@ -1,0 +1,36 @@
+{
+  "name": "eu-tender-scout",
+  "version": "0.1.4",
+  "private": true,
+  "type": "module",
+  "description": "Evidence-first EU public procurement discovery and triage using official TED data.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aleff-github/eu-tender-scout.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aleff-github/eu-tender-scout/issues"
+  },
+  "homepage": "https://github.com/aleff-github/eu-tender-scout#readme",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "deploy:eu-tender-scout": "wrangler deploy"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "2.0.0",
+    "agents": "0.20.1",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11",
+    "wrangler": "^4.40.0"
+  },
+  "license": "GPL-3.0-only"
+}
